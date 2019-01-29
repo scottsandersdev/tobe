@@ -3,135 +3,39 @@
 <head>
   <title>Gaze tracker</title>
   <link rel="stylesheet" href="/style/style.css">
+  <style>
+  .calibration-point {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+  }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <svg height="10" width="10" class="gaze-point">
-      <circle cx="5" cy="5" r="5" fill="red"></circle>
-    </svg>
-    <div class="container">
-      <button class="collider btn-collide" data-position="left"></button>
-    </div>
-    <div class="container">
-      <button class="collider btn-collide" data-position="right"></button>
-    </div>
+  <div>
+    <a href="/test.html">Go to app</a>
+    <p class="set-point"></p>
+  <svg height="85" width="90" class="calibration-point">
+    <circle cx="40" cy="44" r="40" stroke="black" stroke-width="3" fill="red"></circle>
+  </svg>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-    const gazePoint = document.querySelector('.gaze-point');
-    const colliders = document.querySelectorAll('.collider');
-    const gaze = document.querySelector('.gaze-point');
-    let colliderTimeout;
-
-    let currentCollider = '';
+    const calibrationPoint = document.querySelector('.calibration-point');
+    const setPoint = document.querySelector('.set-point');
+    let gazePoint = {};
 
     socket.on('gazeMove', function(data) {
-      gazePoint.style.transform = `translate(${data.x - (data.x/5)}px, ${data.y - (data.y/5)}px)`;
-      checkCollide();
+      gazePoint = data;
     });
 
-    function checkCollide() {
-      const gazeRect = gaze.getBoundingClientRect();
-      let hasCollidedWithObject = false;
+    calibrationPoint.addEventListener('click', () => {
+      socket.emit('calibrate', gazePoint);
+      
+      setPoint.innerText = JSON.stringify(gazePoint);
+    })
 
-      for (let i = 0; i < colliders.length; i++) {
-        const collider = colliders[i];
-        const colliderRect = collider.getBoundingClientRect();
-  
-        if (!(
-        ((gazeRect.top + gazeRect.height) < (colliderRect.top)) ||
-        (gazeRect.top > (colliderRect.top + colliderRect.height)) ||
-        ((gazeRect.left + gazeRect.width) < colliderRect.left) ||
-        (gazeRect.left > (colliderRect.left + colliderRect.width))
-        )) {
-          hasCollidedWithObject = true;
-          var colliderPosition = collider.dataset.position;
-  
-          if (colliderPosition != currentCollider) {
-            if (colliderTimeout) {
-              clearTimeout(colliderTimeout);
-            }
-            colliderTimeout = setTimeout(() => {
-              collider.classList.add('selected');
-            }, 2000);
-            removeAllActive();
-            currentCollider = colliderPosition;
-            collider.classList.add('active');
-          }
-        } 
-        else if (i === colliders.length -1 && !hasCollidedWithObject) {
-          currentCollider = '';
-          removeAllActive();
-        }
-      }
-      // colliders.forEach((collider, i)=> {
-      // })
-    }
-
-    function removeAllActive() {
-      colliders.forEach((collider) => {
-        collider.classList.remove('active', 'selected');
-      })
-    }
-
-    // var socket = null;
-    // var app = new Vue({
-    //   el: '#app',
-    //   data: {
-    //     activeCollider: '',
-    //     colliders: [
-    //       "left",
-    //       "right"
-    //     ],
-    //     gazePosition: {
-    //       left: 0,
-    //       top: 0
-    //     },
-    //     storedPositions: []
-    //   },
-    //   methods: {
-    //     drag: function() {
-    //       console.log('here');
-    //     },
-    //     storeGaze: function() {
-    //       this.storedPositions.push(this.gazePosition);
-    //     },
-    //     checkCollide: function() {
-    //       var gaze = document.querySelector('.gaze-point');
-    //       var colliders = document.querySelectorAll('.collider');
-    //       var gazeRect = gaze.getBoundingClientRect();
-
-    //       colliders.forEach((button)=> {
-    //         var buttonRect = button.getBoundingClientRect();
-
-    //         if (!(
-    //         ((gazeRect.top + gazeRect.height) < (buttonRect.top)) ||
-    //         (gazeRect.top > (buttonRect.top + buttonRect.height)) ||
-    //         ((gazeRect.left + gazeRect.width) < buttonRect.left) ||
-    //         (gazeRect.left > (buttonRect.left + buttonRect.width))
-    //         )) {
-    //           var buttonPosition = button.dataset.position;
-
-    //           if (buttonPosition != this.activeButton) {
-    //             this.activeButton = buttonPosition;
-    //           }
-    //         }
-    //       })
-    //     }
-    //   },
-    //   created: function () {
-    //     socket = io();
-    //   },
-    //   mounted: function () {
-    //     socket.on('gazeMove', (data) => {
-    //       app.$nextTick(function () {
-    //         this.gazePosition = { left: `${data.x - (data.x/5)}px`, top: `${data.y - data.y/5}px` };
-    //         this.checkCollide();
-    //       });
-    //     });
-    //   }
-    // });
   </script>
 </body>
 </html>

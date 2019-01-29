@@ -68,7 +68,7 @@ button {
   background: green;
 }
 
-.container {
+.btn-container {
   align-items: flex-end;
   display: flex;
   height: 100%;

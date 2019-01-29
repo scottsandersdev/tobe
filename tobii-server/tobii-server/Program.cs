@@ -4,7 +4,8 @@ using System.Runtime.InteropServices;
 using Tobii.Interaction;
 using Quobject.SocketIoClientDotNet.Client;
 using Newtonsoft.Json.Linq;
-
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace tobii_server {
     class Program {
@@ -13,6 +14,8 @@ namespace tobii_server {
             var host = new Host();
             var handle = Process.GetCurrentProcess().MainWindowHandle;
             var windowBounds = GetWindowBounds(handle);
+            var calibratedX = 0;
+            var calibratedY = 0;
 
             var greeter = new Greeter(
                 handle.ToString(),
@@ -20,6 +23,12 @@ namespace tobii_server {
                 () => socket.Emit("gazeEnter"),
                 () => socket.Emit("gazeExit"));
 
+            socket.On("calibrate", (data) => {
+                var json = data as JToken;
+                calibratedX = json.Value<int>("x");
+                calibratedY = json.Value<int>("y");
+                Console.WriteLine("[Calibrate] Calibrating to: {0}, {1}", calibratedX, calibratedY);
+            });
 
             var userPresenceStateObserver = host.States.CreateUserPresenceObserver();
             userPresenceStateObserver.WhenChanged(userPresenceState => {
@@ -31,8 +40,8 @@ namespace tobii_server {
             var gazePointDataStream = host.Streams.CreateGazePointDataStream();
             
             gazePointDataStream.GazePoint((gazePointX, gazePointY, _) => {
-                double gazeX = Math.Round(gazePointX);
-                double gazeY = Math.Round(gazePointY);
+                double gazeX = Math.Round(gazePointX) - calibratedX;
+                double gazeY = Math.Round(gazePointY) - calibratedY;
                 JToken gazeData = JToken.Parse("{\"x\": \"" + gazeX + "\", \"y\": \"" + gazeY + "\"}");
                 socket.Emit("gazeMove", gazeData);
             });

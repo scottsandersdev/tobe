@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gaze tracker</title>
+  <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+  <div id="app">
+    <svg height="10" width="10" class="gaze-point">
+      <circle cx="5" cy="5" r="5" fill="red"></circle>
+    </svg>
+    <div class="btn-container">
+      <button class="collider btn-collide" data-position="left"></button>
+    </div>
+    <div class="btn-container">
+      <button class="collider btn-collide" data-position="right"></button>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const gazePoint = document.querySelector('.gaze-point');
+    const colliders = document.querySelectorAll('.collider');
+    const gaze = document.querySelector('.gaze-point');
+    let colliderTimeout;
+
+    let currentCollider = '';
+
+    socket.on('gazeMove', function(data) {
+      gazePoint.style.transform = `translate(${data.x - (data.x/5)}px, ${data.y - (data.y/5)}px)`;
+      checkCollide();
+    });
+
+    function checkCollide() {
+      const gazeRect = gaze.getBoundingClientRect();
+      let hasCollidedWithObject = false;
+
+      for (let i = 0; i < colliders.length; i++) {
+        const collider = colliders[i];
+        const colliderRect = collider.getBoundingClientRect();
+  
+        if (!(
+        ((gazeRect.top + gazeRect.height) < (colliderRect.top)) ||
+        (gazeRect.top > (colliderRect.top + colliderRect.height)) ||
+        ((gazeRect.left + gazeRect.width) < colliderRect.left) ||
+        (gazeRect.left > (colliderRect.left + colliderRect.width))
+        )) {
+          hasCollidedWithObject = true;
+          var colliderPosition = collider.dataset.position;
+  
+          if (colliderPosition != currentCollider) {
+            if (colliderTimeout) {
+              clearTimeout(colliderTimeout);
+            }
+            colliderTimeout = setTimeout(() => {
+              collider.classList.add('selected');
+            }, 2000);
+            removeAllActive();
+            currentCollider = colliderPosition;
+            collider.classList.add('active');
+          }
+        } 
+        else if (i === colliders.length -1 && !hasCollidedWithObject) {
+          currentCollider = '';
+          removeAllActive();
+        }
+      }
+      // colliders.forEach((collider, i)=> {
+      // })
+    }
+
+    function removeAllActive() {
+      colliders.forEach((collider) => {
+        collider.classList.remove('active', 'selected');
+      })
+    }
+  </script>
+</body>
+</html>
