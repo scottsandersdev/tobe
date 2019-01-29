@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+}
+
+html {
+  position: relative;
+}
+
+body,
+html,
+#app {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.aspect-ratio {
+  align-items: center;
+  background: pink;
+  display: flex;
+  height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
+  justify-content: center;
+  left:0;right:0; /* horizontal center */
+  margin: auto;
+  max-height: 100vh;
+  max-width: 177.78vh; /* 16/9 = 1.778 */
+  position: absolute;
+  top:0;bottom:0; /* vertical center */
+  width: 100vw; 
+}
+
+.gaze-point {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0,0);
+  will-change: transform;
+}
+
+#app {
+  display: flex;
+}
+
+button {
+  background: blue;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 20px;
+}
+
+.btn-collide {
+  background: linear-gradient(to right, red 50%, blue 50%);
+  background-position:right bottom;
+  background-size: 200% 100%;
+  padding: 180px 30px;
+  transition: background 0s;
+  width: 99%;
+}
+
+.btn-collide.active {
+  background-position: left bottom;
+  transition:background 2s ease;
+}
+
+.btn-collide.selected {
+  background: green;
+}
+
+.container {
+  align-items: flex-end;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 50%;
+}
+
+.store-gaze {
+  position: fixed;
+  right: 20px;
+  width: 146px;
+}

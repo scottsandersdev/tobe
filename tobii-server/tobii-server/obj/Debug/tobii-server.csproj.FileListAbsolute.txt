@@ -1,0 +1,17 @@
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\Tobii.EyeX.Client.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\tobii-server.exe.config
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\tobii-server.exe
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\tobii-server.pdb
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\EngineIoClientDotNet.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\Newtonsoft.Json.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\SocketIoClientDotNet.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\Tobii.Interaction.Model.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\Tobii.Interaction.Net.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\WebSocket4Net.dll
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\Newtonsoft.Json.xml
+C:\dev\skii\tobii-server\tobii-server\obj\Debug\tobii-server.csprojAssemblyReference.cache
+C:\dev\skii\tobii-server\tobii-server\obj\Debug\tobii-server.csproj.CoreCompileInputs.cache
+C:\dev\skii\tobii-server\tobii-server\obj\Debug\tobii-server.csproj.CopyComplete
+C:\dev\skii\tobii-server\tobii-server\obj\Debug\tobii-server.exe
+C:\dev\skii\tobii-server\tobii-server\obj\Debug\tobii-server.pdb
+C:\dev\skii\tobii-server\tobii-server\bin\Debug\Newtonsoft.Json.pdb
