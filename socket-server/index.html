@@ -23,7 +23,7 @@
     <div class="product product-3"></div>
     <div class="product product-4"></div>
     <div class="product product-5"></div>
-  </div>
+  </div> 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
@@ -46,23 +46,23 @@
       gazePoint = data;
       var xPos = data.x;
 
-      if (xPos < 600) {
+      if (xPos < 2000) {
         clearAll();
         product1.style.backgroundColor = "red";
       }
-      if (xPos >= 600 && xPos < 1200) {
+      if (xPos >= 2000 && xPos < 2800) {
         clearAll();
         product2.style.backgroundColor = "magenta";
       }
-      if (xPos >= 1200 && xPos < 1800) {
+      if (xPos >= 2800 && xPos < 3600) {
         clearAll();
         product3.style.backgroundColor = "indigo";
       }
-      if (xPos >= 1800 && xPos < 2400) {
+      if (xPos >= 3600 && xPos < 4500) {
         clearAll();
         product4.style.backgroundColor = "green";
       }
-      if (xPos > 2400) {
+      if (xPos > 4500) {
         clearAll();
         product5.style.backgroundColor = "yellow";
       }
