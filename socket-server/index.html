@@ -4,37 +4,69 @@
   <title>Gaze tracker</title>
   <link rel="stylesheet" href="/style/style.css">
   <style>
-  .calibration-point {
-    bottom: 0;
-    left: 0;
-    position: absolute;
+  .grid {
+    height:100%;
+    width: 100%;
+    display: flex;
+  }
+  .product {
+    transition: background-color .3s ease;
+    height: 100%;
+    width: 33%;
   }
   </style>
 </head>
 <body>
-  <div>
-    <a href="/test.html">Go to app</a>
-    <p class="set-point"></p>
-  <svg height="85" width="90" class="calibration-point">
-    <circle cx="40" cy="44" r="40" stroke="black" stroke-width="3" fill="red"></circle>
-  </svg>
+  <div class="grid">
+    <div class="product product-1"></div>
+    <div class="product product-2"></div>
+    <div class="product product-3"></div>
+    <div class="product product-4"></div>
+    <div class="product product-5"></div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-    const calibrationPoint = document.querySelector('.calibration-point');
-    const setPoint = document.querySelector('.set-point');
+    const allProducts = document.querySelectorAll('.product');
+    const product1 = document.querySelector('.product-1');
+    const product2 = document.querySelector('.product-2');
+    const product3 = document.querySelector('.product-3');
+    const product4 = document.querySelector('.product-4');
+    const product5 = document.querySelector('.product-5');
+    
+    function clearAll() {
+      allProducts.forEach((i) => {
+        i.style.backgroundColor = "white";
+      })
+    }
+
     let gazePoint = {};
 
     socket.on('gazeMove', function(data) {
       gazePoint = data;
-    });
+      var xPos = data.x;
 
-    calibrationPoint.addEventListener('click', () => {
-      socket.emit('calibrate', gazePoint);
-      
-      setPoint.innerText = JSON.stringify(gazePoint);
-    })
+      if (xPos < 600) {
+        clearAll();
+        product1.style.backgroundColor = "red";
+      }
+      if (xPos >= 600 && xPos < 1200) {
+        clearAll();
+        product2.style.backgroundColor = "magenta";
+      }
+      if (xPos >= 1200 && xPos < 1800) {
+        clearAll();
+        product3.style.backgroundColor = "indigo";
+      }
+      if (xPos >= 1800 && xPos < 2400) {
+        clearAll();
+        product4.style.backgroundColor = "green";
+      }
+      if (xPos > 2400) {
+        clearAll();
+        product5.style.backgroundColor = "yellow";
+      }
+    });
 
   </script>
 </body>
